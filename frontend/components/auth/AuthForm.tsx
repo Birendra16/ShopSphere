@@ -25,15 +25,13 @@ const AuthForm = ({ type, initialValues, validationSchema }: Props) => {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            const res = await api.post(`/api/auth/${type}`, values);
-
-            // Save auth data
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("user", JSON.stringify(res.data.user));
+            await api.post(`/api/auth/${type}`, values);
 
             toast.success(
                 isSignup ? "Account created successfully" : "Login successful"
             );
+
+            window.location.href="/dashboard";
 
           } catch (err: any) {
             toast.error(err.response?.data?.message || "Something went wrong");
