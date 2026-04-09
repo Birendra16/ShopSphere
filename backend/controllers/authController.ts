@@ -32,7 +32,17 @@ export const signup = async (req:Request, res:Response)=>{
         });
 
         const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET!,{expiresIn: "7d"});
-        res.status(201).json({token, user:{id: user._id, name: user.name, email:user.email}});
+
+        res.cookie("token", token,{
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+        });
+        res.status(200).json({
+            user:{id: user._id, 
+            name: user.name, 
+            email:user.email,
+        }});
     } catch (err:any){
         res.status(400).json({message:err.message});
     }
@@ -49,8 +59,23 @@ export const login = async (req:Request, res:Response)=>{
         if(!isValid) return res.status(400).json({message:"Invalid password"});
 
         const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET!, {expiresIn:"7d"});
-        res.json({token, user:{id:user._id, name:user.name, email:user.email}});
+
+        res.cookie("token", token,{
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+        });
+        res.status(200).json({
+            user:{id: user._id, 
+            name: user.name, 
+            email:user.email,
+        }});
     } catch (err:any){
         res.status(400).json({message:err.message});
     }
 }
+
+export const logout = async(req: Request, res:Response)=>{
+    res.clearCookie("token");
+    res.json({message:"Logged out successfully"});
+};
