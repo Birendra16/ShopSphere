@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 app.use(
     cors({
-        origin:process.env.CLIENT_URL || "http://localhost:300",
+        origin: [process.env.CLIENT_URL || "http://localhost:3000", "http://localhost:3001"],
         credentials: true,
     }));
 
@@ -22,8 +22,8 @@ mongoose.connect(process.env.DATABASE_URL!)
 .then(()=> console.log("MongoDB Connected "))
 .catch((err)=>console.error(err));
 
-app.use("/api/auth", authRouter);
-app.use("/api/products", productRouter);
+app.use("/api/auth", authRouter)
+app.use("/api/products", productRouter)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, ()=> console.log(`Server running on port ${PORT}`))
