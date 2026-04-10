@@ -16,8 +16,8 @@ productRouter.get("/", asyncHandler(getProducts));
 productRouter.get("/:id", asyncHandler(getProduct));
 
 // Protected routes
-productRouter.post("/", authMiddleware, asyncHandler(createProduct));
-productRouter.put("/:id", authMiddleware, asyncHandler(updateProduct));
-productRouter.delete("/:id", authMiddleware, asyncHandler(deleteProduct));
+productRouter.post("/", authMiddleware(["admin"]), asyncHandler(createProduct));
+productRouter.put("/:id", authMiddleware(["admin"]), asyncHandler(updateProduct));
+productRouter.delete("/:id", authMiddleware(["admin"]), asyncHandler(deleteProduct));
 
 export default productRouter;

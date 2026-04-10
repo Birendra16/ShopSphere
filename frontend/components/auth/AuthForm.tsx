@@ -36,7 +36,7 @@ const AuthForm = ({ type, initialValues, validationSchema }: Props) => {
           validationSchema={validationSchema}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-              await api.post(`/api/auth/${type}`, values);
+              const res = await api.post(`/api/auth/${type}`, values);
 
               toast.success(
                 isSignup
@@ -44,7 +44,11 @@ const AuthForm = ({ type, initialValues, validationSchema }: Props) => {
                   : "Login successful"
               );
 
-              window.location.href = "/dashboard";
+              if (res.data.user?.role === "admin") {
+                window.location.href = "/admin";
+              } else {
+                window.location.href = "/dashboard";
+              }
             } catch (err: any) {
               toast.error(
                 err.response?.data?.message || "Something went wrong"
